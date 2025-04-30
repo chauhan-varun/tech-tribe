@@ -107,7 +107,7 @@ const deleteTeamMember = async (req, res) => {
       await cloudinary.uploader.destroy(`tech-tribe/${publicId}`);
     }
     
-    await teamMember.remove();
+    await TeamMember.findByIdAndDelete(req.params.id);
     res.json({ message: 'Team member removed' });
   } catch (error) {
     console.error(error);

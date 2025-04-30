@@ -443,7 +443,18 @@ const EventsPage = () => {
                     </div>
                     
                     <div className="event-footer">
-                      <button className="btn">Register Now</button>
+                      <button 
+                        className="btn" 
+                        onClick={() => {
+                          if (event.url) {
+                            window.open(event.url, '_blank', 'noopener,noreferrer');
+                          } else {
+                            alert('Registration link not available for this event.');
+                          }
+                        }}
+                      >
+                        Register Now
+                      </button>
                     </div>
                   </div>
                 </EventCard>

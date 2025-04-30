@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { getEventById, createEvent, updateEvent } from '../utils/api';
-import { FaArrowLeft, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTicketAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTicketAlt, FaLink } from 'react-icons/fa';
 
 const FormContainer = styled.div``;
 
@@ -123,7 +123,8 @@ const EventFormPage = () => {
     date: '',
     time: '',
     location: '',
-    price: ''
+    price: '',
+    url: ''
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -149,7 +150,8 @@ const EventFormPage = () => {
         date: formattedDate,
         time: data.time,
         location: data.location,
-        price: data.price
+        price: data.price,
+        url: data.url || ''
       });
       
       setInitialLoading(false);
@@ -338,6 +340,20 @@ const EventFormPage = () => {
               {errors.price && <div className="error">{errors.price}</div>}
             </FormGroup>
           </FormRow>
+          
+          <FormGroup>
+            <label htmlFor="url">
+              <FaLink /> Registration URL (Optional)
+            </label>
+            <input
+              type="text"
+              id="url"
+              name="url"
+              value={formData.url}
+              onChange={handleChange}
+              placeholder="Enter registration link (e.g., https://example.com/register)"
+            />
+          </FormGroup>
           
           <ButtonGroup>
             <button

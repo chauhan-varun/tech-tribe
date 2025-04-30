@@ -18,12 +18,33 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled(Link)`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  
+  .logo-img {
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+  }
   
   span {
     color: var(--accent-color);
+  }
+  
+  @media (max-width: 480px) {
+    .logo-img {
+      height: 40px;
+    }
+    
+    .logo-text {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -98,7 +119,12 @@ const Header = () => {
       <div className="container">
         <Nav>
           <Logo to="/">
-            Tech<span>Tribe</span>
+            <img 
+              src="https://techtribecheck.netlify.app/lovable-uploads/21ef0c51-1eeb-42ba-8098-a0318aa2c3b7.png" 
+              alt="TechTribe Logo" 
+              className="logo-img" 
+            />
+            <div className="logo-text">Tech<span>Tribe</span></div>
           </Logo>
           
           <MobileMenuButton onClick={toggleMenu}>

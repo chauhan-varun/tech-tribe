@@ -24,6 +24,10 @@ const eventSchema = new mongoose.Schema({
   price: {
     type: String,
     required: [true, 'Price is required']
+  },
+  url: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

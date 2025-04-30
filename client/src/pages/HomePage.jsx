@@ -406,8 +406,7 @@ const HomePage = () => {
         <HeroContent>
           <h1>Welcome to Tech<span>Tribe</span></h1>
           <p>
-            Join our vibrant community of tech enthusiasts, innovators, and creators.
-            Together, we build, learn, and grow in the ever-evolving world of technology.
+          Join a thriving community of 500+ tech enthusiasts at K.R. MANGALAM University, Gurugram
           </p>
           <div className="cta-buttons">
             <Link to="/events" className="btn">Upcoming Events</Link>
@@ -544,7 +543,7 @@ const HomePage = () => {
             Stay updated with our latest events, workshops, and community activities.
             Join us today and be part of the tech revolution.
           </p>
-          <Link to="/events" className="btn">Join Upcoming Event</Link>
+          <a href="https://chat.whatsapp.com/I6YpsX5z3GP6oKlGGw26ka" target="_blank" rel="noopener noreferrer" className="btn">Join Our Community</a>
         </div>
       </CtaSection>
     </>

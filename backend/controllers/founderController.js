@@ -109,7 +109,7 @@ const deleteFounder = async (req, res) => {
       await cloudinary.uploader.destroy(`tech-tribe/${publicId}`);
     }
     
-    await founder.remove();
+    await Founder.findByIdAndDelete(req.params.id);
     res.json({ message: 'Founder removed' });
   } catch (error) {
     console.error(error);

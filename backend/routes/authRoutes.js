@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser, getUserProfile } = require('../controllers/authController');
+const { registerUser, loginUser, getUserProfile, updateUserEmail, updateUserPassword } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { check } = require('express-validator');
 
@@ -27,5 +27,27 @@ router.post(
 
 // Get user profile
 router.get('/profile', protect, getUserProfile);
+
+// Update user email
+router.put(
+  '/:userId/email',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  protect,
+  updateUserEmail
+);
+
+// Update user password
+router.put(
+  '/:userId/password',
+  [
+    check('currentPassword', 'Current password is required').exists(),
+    check('newPassword', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+  ],
+  protect,
+  updateUserPassword
+);
 
 module.exports = router;

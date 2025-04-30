@@ -107,7 +107,7 @@ const deleteOrganization = async (req, res) => {
       await cloudinary.uploader.destroy(`tech-tribe/${publicId}`);
     }
     
-    await organization.remove();
+    await Organization.findByIdAndDelete(req.params.id);
     res.json({ message: 'Organization removed' });
   } catch (error) {
     console.error(error);

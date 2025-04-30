@@ -36,7 +36,7 @@ const getEventById = async (req, res) => {
 // @access  Private/Admin
 const createEvent = async (req, res) => {
   try {
-    const { eventTitle, description, date, time, location, price } = req.body;
+    const { eventTitle, description, date, time, location, price, url } = req.body;
     
     const newEvent = new Event({
       eventTitle,
@@ -44,7 +44,8 @@ const createEvent = async (req, res) => {
       date,
       time,
       location,
-      price
+      price,
+      url
     });
     
     const savedEvent = await newEvent.save();
@@ -60,7 +61,7 @@ const createEvent = async (req, res) => {
 // @access  Private/Admin
 const updateEvent = async (req, res) => {
   try {
-    const { eventTitle, description, date, time, location, price } = req.body;
+    const { eventTitle, description, date, time, location, price, url } = req.body;
     
     const event = await Event.findById(req.params.id);
     
@@ -74,6 +75,7 @@ const updateEvent = async (req, res) => {
     event.time = time || event.time;
     event.location = location || event.location;
     event.price = price || event.price;
+    event.url = url || event.url;
     
     const updatedEvent = await event.save();
     res.json(updatedEvent);
@@ -88,13 +90,12 @@ const updateEvent = async (req, res) => {
 // @access  Private/Admin
 const deleteEvent = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findByIdAndDelete(req.params.id);
     
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
     
-    await event.remove();
     res.json({ message: 'Event removed' });
   } catch (error) {
     console.error(error);
