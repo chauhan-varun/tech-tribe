@@ -1,237 +1,140 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { FaBuilding } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { HashLoader } from 'react-spinners';
+import { useAppContext } from '../context/AppContext';
 
-const OrganizationContainer = styled.section`
-  padding: 4rem 0;
-`;
-
-const PageTitle = styled.h1`
-  text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
-  
-  span {
-    color: var(--accent-color);
-  }
-`;
-
-const OrganizationCard = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  background-color: var(--secondary-color);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const ImageContainer = styled.div`
-  height: 400px;
-  overflow: hidden;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    
-    &:hover {
-      transform: scale(1.05);
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.1,
+      duration: 0.5
     }
   }
-`;
+};
 
-const ContentContainer = styled.div`
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    
-    svg {
-      margin-right: 0.8rem;
-      color: var(--accent-color);
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5
     }
   }
-  
-  p {
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 1.5rem;
-  }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px;
-  
-  .loader {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top: 4px solid var(--accent-color);
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
-
-const ErrorContainer = styled.div`
-  text-align: center;
-  padding: 3rem;
-  border-radius: 10px;
-  background-color: var(--secondary-color);
-  margin-bottom: 2rem;
-  
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--danger-color);
-  }
-  
-  p {
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  button {
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: var(--transition);
-    
-    &:hover {
-      background-color: #cc0000;
-    }
-  }
-`;
-
-const NoOrganizationContainer = styled.div`
-  text-align: center;
-  padding: 3rem;
-  border-radius: 10px;
-  background-color: var(--secondary-color);
-  
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
-  }
-  
-  p {
-    color: rgba(255, 255, 255, 0.7);
-  }
-`;
+};
 
 const OrganizationPage = () => {
-  const [organization, setOrganization] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  useEffect(() => {
-    fetchOrganization();
-  }, []);
-  
-  const fetchOrganization = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/organizations');
-      if (response.data && response.data.length > 0) {
-        setOrganization(response.data[0]);
-      } else {
-        setOrganization(null);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching organization:', error);
-      setError('Failed to fetch organization information. Please try again later.');
-      setLoading(false);
-      toast.error('Failed to load organization information');
-    }
-  };
-  
+  // Use the shared context instead of local state
+  const { organizations, loading, error, refreshOrganizations } = useAppContext();
+
   if (loading) {
     return (
-      <OrganizationContainer>
-        <div className="container">
-          <PageTitle>Our <span>Organization</span></PageTitle>
-          <LoadingContainer>
-            <div className="loader"></div>
-          </LoadingContainer>
-        </div>
-      </OrganizationContainer>
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#ff3333" size={60} />
+      </div>
     );
   }
-  
+
   if (error) {
     return (
-      <OrganizationContainer>
-        <div className="container">
-          <PageTitle>Our <span>Organization</span></PageTitle>
-          <ErrorContainer>
-            <h3>Something went wrong</h3>
-            <p>{error}</p>
-            <button onClick={fetchOrganization}>Try Again</button>
-          </ErrorContainer>
-        </div>
-      </OrganizationContainer>
-    );
-  }
-  
-  if (!organization) {
-    return (
-      <OrganizationContainer>
-        <div className="container">
-          <PageTitle>Our <span>Organization</span></PageTitle>
-          <NoOrganizationContainer>
-            <h3>Organization Information Coming Soon</h3>
-            <p>We're currently updating our organization information. Please check back later.</p>
-          </NoOrganizationContainer>
-        </div>
-      </OrganizationContainer>
-    );
-  }
-  
-  return (
-    <OrganizationContainer>
-      <div className="container">
-        <PageTitle>Our <span>Organization</span></PageTitle>
-        <OrganizationCard>
-          <ImageContainer>
-            <img src={organization.image} alt={organization.title} />
-          </ImageContainer>
-          <ContentContainer>
-            <h2>
-              <FaBuilding />
-              {organization.title}
-            </h2>
-            <p>{organization.description}</p>
-          </ContentContainer>
-        </OrganizationCard>
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-2xl font-bold text-primary-500 mb-4">{error}</h2>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg"
+        >
+          Retry
+        </button>
       </div>
-    </OrganizationContainer>
+    );
+  }
+
+  return (
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="container mx-auto px-4 py-8"
+    >
+      {/* Hero Section */}
+      <motion.section 
+        variants={itemVariants}
+        className="mb-12"
+      >
+        <motion.div
+          className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-white text-center"
+        >
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">Partner Organizations</h1>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto">
+            Meet the organizations that collaborate with Tech Tribe to create a thriving tech ecosystem
+          </p>
+        </motion.div>
+      </motion.section>
+
+      {/* Organizations List */}
+      <motion.section
+        variants={itemVariants}
+      >
+        {organizations.length === 0 ? (
+          <motion.div 
+            variants={itemVariants}
+            className="text-center py-12 bg-[#1d1d1d] rounded-lg"
+          >
+            <h3 className="text-xl text-white/80">No organizations available at the moment.</h3>
+            <p className="mt-2 text-white/60">Check back soon for updates!</p>
+          </motion.div>
+        ) : (
+          <motion.div 
+            variants={containerVariants}
+            className="space-y-12"
+          >
+            {organizations.map((org, index) => (
+              <motion.div
+                key={org._id}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden"
+              >
+                <div className="md:flex">
+                  <div className="md:w-1/3 h-64 md:h-auto">
+                    <img 
+                      src={org.image} 
+                      alt={org.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="md:w-2/3 p-6 md:p-8">
+                    <h2 className="text-2xl font-bold text-white mb-4">{org.title}</h2>
+                    <p className="text-white/80 mb-6">{org.description}</p>
+                    <div className="flex space-x-4">
+                      <motion.a
+                        href="#"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center text-primary-500 hover:text-primary-400"
+                      >
+                        
+                      </motion.a>
+                      <motion.a
+                        href="#"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center text-primary-500 hover:text-primary-400"
+                      >
+                    
+                      </motion.a>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </motion.section>
+    </motion.div>
   );
 };
 

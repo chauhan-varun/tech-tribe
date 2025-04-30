@@ -1,78 +1,60 @@
+/* Base styles */
+@import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-:root {
-  --primary-color: #000000; /* Black */
-  --accent-color: #FF0000; /* Red */
-  --text-color: #FFFFFF; /* White */
-  --secondary-bg: #121212;
-  --card-bg: #1e1e1e;
-  --transition: all 0.3s ease;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Custom styles */
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  line-height: 1.6;
+  color: #ffffff; /* white text */
+  background-color: #121212; /* slightly lighter black background */
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700; /* font-bold */
+  color: #ff3333; /* red headings */
+}
+
+/* Theme variables */
+:root {
+  --primary-color: #ff3333; /* red */
+  --text-color: #ffffff; /* white */
+  --bg-color: #121212; /* slightly lighter black */
+  --secondary-bg: #1a1a1a; /* slightly lighter black for contrast */
+  --component-bg: #181818; /* slight faded black for components */
+  --card-bg: #1d1d1d; /* slightly faded black for cards */
+  --hover-bg: #252525; /* slightly lighter background for hover states */
+}
+
+/* Ensure links are properly styled */
 a {
-  color: var(--accent-color);
-  text-decoration: none;
-  transition: var(--transition);
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+}
+
+/* Navbar specific styles */
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  font-weight: 600;
 }
 
 a:hover {
-  opacity: 0.8;
+  color: #ffffff; /* white on hover */
 }
 
-button {
-  cursor: pointer;
-  background-color: var(--accent-color);
+/* Add styling for buttons */
+button, .button {
+  background-color: var(--primary-color);
   color: var(--text-color);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: 500;
-  transition: var(--transition);
+  transition: background-color 0.2s ease;
 }
 
-button:hover {
-  opacity: 0.9;
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.section {
-  padding: 60px 0;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  text-align: center;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background-color: var(--accent-color);
+button:hover, .button:hover {
+  background-color: #cc0000; /* darker red on hover */
 }

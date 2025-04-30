@@ -1,339 +1,236 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { getOrganizations } from '../utils/api';
+import { motion } from 'framer-motion';
 
-const AboutPageContainer = styled.div`
-  padding: 80px 0;
-`;
-
-const Banner = styled.div`
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url('/about-banner.jpg');
-  background-size: cover;
-  background-position: center;
-  padding: 100px 0;
-  text-align: center;
-  margin-bottom: 60px;
-  
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    
-    span {
-      color: var(--accent-color);
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.1,
+      duration: 0.5
     }
   }
-  
-  p {
-    max-width: 700px;
-    margin: 0 auto;
-    color: rgba(255, 255, 255, 0.8);
-  }
-`;
+};
 
-const AboutSection = styled.section`
-  padding: 60px 0;
-`;
-
-const AboutGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const AboutImage = styled.div`
-  img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  @media (max-width: 768px) {
-    grid-row: 1;
-  }
-`;
-
-const AboutContent = styled.div`
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    
-    span {
-      color: var(--accent-color);
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5
     }
   }
-  
-  p {
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.8;
-  }
-`;
-
-const MissionSection = styled.section`
-  padding: 60px 0;
-  background-color: var(--secondary-bg);
-`;
-
-const MissionContent = styled.div`
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-  
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    
-    span {
-      color: var(--accent-color);
-    }
-  }
-  
-  p {
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.8;
-  }
-`;
-
-const ValuesSection = styled.section`
-  padding: 60px 0;
-`;
-
-const ValueGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-`;
-
-const ValueCard = styled.div`
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  padding: 2rem;
-  transition: var(--transition);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  .icon {
-    font-size: 3rem;
-    color: var(--accent-color);
-    margin-bottom: 1.5rem;
-  }
-  
-  h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-  }
-  
-  p {
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-  }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  
-  .spinner {
-    border: 5px solid rgba(255, 255, 255, 0.1);
-    border-top: 5px solid var(--accent-color);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
-
-const ErrorContainer = styled.div`
-  text-align: center;
-  padding: 50px 0;
-  
-  h2 {
-    color: var(--accent-color);
-    margin-bottom: 1rem;
-  }
-  
-  p {
-    margin-bottom: 2rem;
-  }
-`;
+};
 
 const AboutPage = () => {
-  const [organization, setOrganization] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  useEffect(() => {
-    const fetchOrganization = async () => {
-      try {
-        setLoading(true);
-        const data = await getOrganizations();
-        setOrganization(data.length > 0 ? data[0] : null);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching organization:', err);
-        setError('Failed to load organization info. Please try again later.');
-        setLoading(false);
-      }
-    };
-    
-    fetchOrganization();
-  }, []);
-  
-  if (loading) {
-    return (
-      <AboutPageContainer>
-        <div className="container">
-          <LoadingContainer>
-            <div className="spinner"></div>
-          </LoadingContainer>
-        </div>
-      </AboutPageContainer>
-    );
-  }
-  
-  if (error || !organization) {
-    return (
-      <AboutPageContainer>
-        <div className="container">
-          <ErrorContainer>
-            <h2>Oops!</h2>
-            <p>{error || 'Organization information not found.'}</p>
-            <button onClick={() => window.location.reload()} className="btn">Try Again</button>
-          </ErrorContainer>
-        </div>
-      </AboutPageContainer>
-    );
-  }
-  
   return (
-    <AboutPageContainer>
-      <Banner>
-        <div className="container">
-          <h1>About <span>Us</span></h1>
-          <p>
-            Learn more about our mission, values, and the story behind Tech Tribe.
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="container mx-auto px-4 py-8"
+    >
+      {/* Hero Section */}
+      <motion.section 
+        variants={itemVariants}
+        className="mb-12"
+      >
+        <motion.div
+          className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-white text-center"
+        >
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">About Tech Tribe</h1>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto">
+            Empowering the next generation of tech innovators through community, learning, and leadership.
           </p>
-        </div>
-      </Banner>
-      
-      <AboutSection>
-        <div className="container">
-          <AboutGrid>
-            <AboutImage>
-              <img src={organization.image} alt={organization.title} />
-            </AboutImage>
-            <AboutContent>
-              <h2>Our <span>Story</span></h2>
-              <p>{organization.description}</p>
-              <p>
-                Founded with a vision to create a thriving tech community, Tech Tribe has grown
-                into a platform that connects innovators, learners, and industry experts.
-                We believe in the power of collaboration and knowledge sharing to drive
-                technological advancement and personal growth.
-              </p>
-            </AboutContent>
-          </AboutGrid>
-        </div>
-      </AboutSection>
-      
-      <MissionSection>
-        <div className="container">
-          <MissionContent>
-            <h2>Our <span>Mission</span></h2>
-            <p>
-              To foster a vibrant community that empowers individuals through technology,
-              innovation, and collaboration. We strive to create an inclusive environment
-              where members can learn, grow, and contribute to the ever-evolving tech landscape.
+        </motion.div>
+      </motion.section>
+
+      {/* Our Story Section */}
+      <motion.section 
+        variants={itemVariants}
+        className="mb-16"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary-500">Our Story</h2>
+          <div className="bg-[#181818] rounded-lg shadow-md p-6 md:p-8">
+            <p className="text-white/80 mb-4">
+              Tech Tribe was founded in 2020 with a simple mission: to create a supportive community for tech enthusiasts, 
+              professionals, and aspiring developers. What started as a small meetup group has grown into a thriving 
+              ecosystem of innovators, mentors, and learners.
             </p>
-            <p>
-              Through our events, workshops, and networking opportunities, we aim to bridge
-              the gap between theory and practice, connecting talented individuals with
-              real-world challenges and opportunities.
+            <p className="text-white/80 mb-4">
+              Our community spans across various domains including software development, data science, artificial intelligence, 
+              cybersecurity, and entrepreneurship. We believe in the power of collaboration and knowledge sharing to drive 
+              technological advancement.
             </p>
-          </MissionContent>
+            <p className="text-white/80">
+              Today, Tech Tribe hosts regular events, workshops, hackathons, and networking sessions that bring together 
+              individuals who are passionate about technology and its potential to solve real-world problems.
+            </p>
+          </div>
         </div>
-      </MissionSection>
-      
-      <ValuesSection>
-        <div className="container">
-          <h2 className="section-title">Our <span>Values</span></h2>
-          
-          <ValueGrid>
-            <ValueCard>
-              <div className="icon">🔍</div>
-              <h3>Innovation</h3>
-              <p>
-                We embrace creative thinking and continuously seek new approaches to
-                solve problems and drive technological advancement.
-              </p>
-            </ValueCard>
+      </motion.section>
+
+      {/* Our Mission & Vision Section */}
+      <section className="mb-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="bg-[#1d1d1d] rounded-lg shadow-md p-6 relative overflow-hidden"
+            >
+              <div className="absolute top-3 left-3 w-10 h-10 bg-primary-900/60 rounded-full flex items-center justify-center text-primary-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="pl-12">
+                <h3 className="text-xl font-semibold mb-4 text-primary-500">Our Mission</h3>
+                <p className="text-white/80">
+                  To foster a collaborative environment where technology enthusiasts can learn, share knowledge, 
+                  and grow together. We aim to bridge the gap between academic learning and industry requirements 
+                  by providing practical experiences and mentorship opportunities.
+                </p>
+              </div>
+            </motion.div>
             
-            <ValueCard>
-              <div className="icon">🤝</div>
-              <h3>Collaboration</h3>
-              <p>
-                We believe in the power of teamwork and collective intelligence to
-                achieve greater outcomes than what can be accomplished individually.
-              </p>
-            </ValueCard>
-            
-            <ValueCard>
-              <div className="icon">📚</div>
-              <h3>Continuous Learning</h3>
-              <p>
-                We foster a culture of lifelong learning, encouraging our members to
-                stay curious, adaptable, and open to new ideas and technologies.
-              </p>
-            </ValueCard>
-            
-            <ValueCard>
-              <div className="icon">🌍</div>
-              <h3>Inclusivity</h3>
-              <p>
-                We champion diversity and ensure that our community is accessible and
-                welcoming to individuals from all backgrounds and skill levels.
-              </p>
-            </ValueCard>
-            
-            <ValueCard>
-              <div className="icon">🚀</div>
-              <h3>Excellence</h3>
-              <p>
-                We strive for the highest standards in everything we do, from the quality
-                of our events to the impact of our community initiatives.
-              </p>
-            </ValueCard>
-            
-            <ValueCard>
-              <div className="icon">💡</div>
-              <h3>Impact</h3>
-              <p>
-                We are committed to making a positive difference in the tech ecosystem
-                and empowering individuals to create meaningful change through technology.
-              </p>
-            </ValueCard>
-          </ValueGrid>
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="bg-[#1d1d1d] rounded-lg shadow-md p-6 relative overflow-hidden"
+            >
+              <div className="absolute top-3 left-3 w-10 h-10 bg-primary-900/60 rounded-full flex items-center justify-center text-primary-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div className="pl-12">
+                <h3 className="text-xl font-semibold mb-4 text-primary-500">Our Vision</h3>
+                <p className="text-white/80">
+                  To become the leading tech community that nurtures innovation, promotes diversity in tech, 
+                  and creates meaningful impact through technology solutions. We envision a future where everyone 
+                  has access to the resources and support needed to thrive in the digital economy.
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </ValuesSection>
-    </AboutPageContainer>
+      </section>
+
+      {/* Core Values Section */}
+      <motion.section 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
+        className="mb-16"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary-500">Our Core Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { 
+                title: "Technical Workshops", 
+                description: "Hands-on sessions covering cutting-edge technologies, programming languages, and development tools.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                )
+              },
+              { 
+                title: "Hackathons", 
+                description: "Competitive coding events where teams collaborate to solve real-world problems through innovative solutions.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                )
+              },
+              { 
+                title: "Networking", 
+                description: "Connect with industry professionals and fellow tech enthusiasts to build meaningful relationships.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                )
+              },
+              { 
+                title: "Learning Resources", 
+                description: "Access to curated learning materials, tutorials, and practice problems for continuous skill development.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                )
+              },
+              { 
+                title: "Project Collaborations", 
+                description: "Find teammates for side projects, hackathons, or research initiatives within our community.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  </svg>
+                )
+              },
+              { 
+                title: "Industry Connections", 
+                description: "Opportunities to connect with leading companies, explore career paths, and discover prospective roles.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                )
+              }
+            ].map((value, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+                className="bg-[#1d1d1d] rounded-lg shadow-md p-6 relative overflow-hidden"
+              >
+                <div className="absolute top-3 left-3 w-10 h-10 bg-primary-900/60 rounded-full flex items-center justify-center text-primary-500">
+                  {value.icon}
+                </div>
+                <div className="pl-12">
+                  <h3 className="text-lg font-semibold mb-2 text-primary-500">{value.title}</h3>
+                  <p className="text-white/80">{value.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Join Us Section */}
+      <section>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-center max-w-4xl mx-auto"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-primary-500">Join Our Community</h2>
+          <p className="text-white/80 mb-8">
+            Whether you're a seasoned professional or just starting out in tech, there's a place for you in our community.
+            Join us to learn, connect, and grow together.
+          </p>
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold shadow-sm transition duration-300"
+          >
+            Become a Member
+          </motion.button>
+        </motion.div>
+      </section>
+    </motion.div>
   );
 };
 
