@@ -56,7 +56,7 @@ const AboutPage = () => {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary-500">Our Story</h2>
           <div className="bg-[#181818] rounded-lg shadow-md p-6 md:p-8">
             <p className="text-white/80 mb-4">
-              Tech Tribe was founded in 2020 with a simple mission: to create a supportive community for tech enthusiasts, 
+              Tech Tribe was founded in 2024 with a simple mission: to create a supportive community for tech enthusiasts, 
               professionals, and aspiring developers. What started as a small meetup group has grown into a thriving 
               ecosystem of innovators, mentors, and learners.
             </p>

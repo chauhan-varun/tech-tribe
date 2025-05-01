@@ -440,11 +440,13 @@ const HomePage = () => {
                 variants={itemVariants}
                 className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden"
               >
-                <img 
-                  src={founder.image} 
-                  alt={founder.name} 
-                  className="w-full h-56 object-cover"
-                />
+                <div className="aspect-[3/4] flex items-center justify-center bg-black/20">
+                  <img 
+                    src={founder.image} 
+                    alt={founder.name} 
+                    className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-1 text-white">{founder.name}</h3>
                   <p className="text-primary-400 mb-4">{founder.role}</p>
