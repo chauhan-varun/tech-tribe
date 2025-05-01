@@ -176,7 +176,7 @@ const HomePage = () => {
         <TechShapes scrollYProgress={scrollYProgress} />
         
         <motion.div
-          className="bg-black py-8 px-5 sm:py-12 md:py-16 sm:px-8 md:px-12 flex flex-col md:flex-row items-center justify-between relative z-10"
+          className="bg-black/70 py-8 px-5 sm:py-12 md:py-16 sm:px-8 md:px-12 flex flex-col md:flex-row items-center justify-between relative z-10 backdrop-blur-sm rounded-4xl shadow-lg"
         >
           <motion.div 
             className="md:w-1/2 mb-8 md:mb-0"
