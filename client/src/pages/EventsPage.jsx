@@ -109,28 +109,28 @@ const EventsPage = () => {
                 whileHover={{ y: -5 }}
                 className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
               >
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 sm:mb-4">
                     <div>
-                      <h3 className="text-xl font-semibold text-primary-500">{event.eventTitle}</h3>
-                      <p className="text-primary-400 mt-1">
+                      <h3 className="text-lg sm:text-xl font-semibold text-primary-500">{event.eventTitle}</h3>
+                      <p className="text-primary-400 text-sm mt-1">
                         {format(new Date(event.date), 'MMMM dd, yyyy')} • {event.time}
                       </p>
                     </div>
-                    <span className="bg-primary-900 text-primary-200 text-sm font-medium px-3 py-1 rounded-full border border-primary-700">
+                    <span className="bg-primary-900 text-primary-200 text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full border border-primary-700 mt-2 sm:mt-0 self-start">
                       {event.price}
                     </span>
                   </div>
 
-                  <p className="text-white/80 mb-6 line-clamp-3">{event.description}</p>
+                  <p className="text-white/80 text-sm mb-4 sm:mb-6 line-clamp-3">{event.description}</p>
                   
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-white/70">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center text-white/70 text-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      <span>{event.location}</span>
+                      <span className="truncate">{event.location}</span>
                     </div>
                     <motion.a
                       href={event.url || '#'}

@@ -261,19 +261,16 @@ const OrganizationPage = () => {
     <OrganizationContainer>
       <Header>
         <h1>Organization</h1>
-        {organizations.length === 0 ? (
-          <Link to="/organization/new" className="btn">
-            <FaPlus style={{ marginRight: '0.5rem' }} />
-            Add Organization
-          </Link>
-        ) : null}
+        <Link to="/organization/new" className="btn">
+          <FaPlus style={{ marginRight: '0.5rem' }} />
+          Add Organization
+        </Link>
       </Header>
       
       {organizations.length === 0 ? (
         <EmptyState>
           <h3>No Organization Information</h3>
           <p>You haven't added organization information yet.</p>
-          <Link to="/organization/new" className="btn">Add Organization</Link>
         </EmptyState>
       ) : (
         organizations.map(org => (

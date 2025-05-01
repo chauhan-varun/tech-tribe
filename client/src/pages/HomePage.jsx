@@ -164,19 +164,19 @@ const HomePage = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 py-6 sm:py-8"
     >
       {/* Hero Section */}
       <motion.section 
         ref={heroRef}
         variants={itemVariants}
-        className="mb-16 relative overflow-hidden"
+        className="mb-12 md:mb-16 relative overflow-hidden"
       >
         {/* Animated tech background shapes */}
         <TechShapes scrollYProgress={scrollYProgress} />
         
         <motion.div
-          className="bg-black py-12 px-8 md:py-16 md:px-12 flex flex-col md:flex-row items-center justify-between relative z-10"
+          className="bg-black py-8 px-5 sm:py-12 md:py-16 sm:px-8 md:px-12 flex flex-col md:flex-row items-center justify-between relative z-10"
         >
           <motion.div 
             className="md:w-1/2 mb-8 md:mb-0"
@@ -184,14 +184,14 @@ const HomePage = () => {
             initial="hidden"
             animate="visible"
           >
-            <motion.h1 variants={childVariants} className="text-2xl md:text-4xl font-bold mb-2">
+            <motion.h1 variants={childVariants} className="text-xl sm:text-2xl md:text-4xl font-bold mb-2">
               <span className="text-primary-500">Tech</span> Tribe
             </motion.h1>
-            <motion.p variants={childVariants} className="text-lg md:text-xl mb-4 text-white/80">
+            <motion.p variants={childVariants} className="text-base sm:text-lg md:text-xl mb-4 text-white/80">
               Join a thriving community of{" "}
               <motion.span 
                 ref={countRef}
-                className="font-bold bg-gradient-to-r from-primary-600 to-primary-400 text-white px-3 py-1 rounded-full inline-flex items-center justify-center drop-shadow-[0_4px_6px_rgba(255,51,51,0.3)]"
+                className="font-bold bg-gradient-to-r from-primary-600 to-primary-400 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full inline-flex items-center justify-center drop-shadow-[0_4px_6px_rgba(255,51,51,0.3)]"
                 initial={{ scale: 0.9, opacity: 0.8 }}
                 whileInView={{
                   scale: [0.95, 1.05, 0.95],
@@ -213,38 +213,45 @@ const HomePage = () => {
                 />
                 <span className="ml-0.5">+</span>
               </motion.span>{" "}
-              tech enthusiasts <br />
+              tech enthusiasts <br className="hidden xs:block" />
               at K.R. MANGALAM University, Gurugram.
             </motion.p>
             <motion.p variants={childVariants} className="text-sm text-white/60 mb-6">
               Learning together. Building together. Growing together.
             </motion.p>
-            <motion.div variants={childVariants} className="flex space-x-4">
-              <motion.a 
-                href="https://chat.whatsapp.com/I6YpsX5z3GP6oKlGGw26ka"
+            <motion.div 
+              variants={childVariants}
+              className="flex flex-col xs:flex-row gap-3 sm:gap-4"
+            >
+              <motion.a
+                href="https://chat.whatsapp.com/Hgt656siE7aEyq5uFZwBg1"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05, backgroundColor: "#cc0000" }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-primary-600 text-white px-6 py-2 rounded-md font-medium transition duration-300 flex items-center cursor-pointer"
+                className="bg-black/50 border border-primary-500 text-primary-500 px-6 py-2 rounded-md font-medium hover:bg-primary-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-md transform"
+                whileHover={{ 
+                  scale: 1.03,
+                  boxShadow: "0 10px 15px -3px rgba(255, 51, 51, 0.3), 0 4px 6px -2px rgba(255, 51, 51, 0.2)"
+                }}
               >
-                Join Our Community
+                Join Our Community 
                 <motion.svg 
                   xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5 ml-2" 
-                  viewBox="0 0 20 20" 
-                  fill="currentColor"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, repeatDelay: 2 }}
+                  className="h-5 w-5 ml-1" 
+                  fill="none"
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  animate={{ x: [0, 3, 0] }}
+                  transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, repeatDelay: 1 }}
                 >
-                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </motion.svg>
               </motion.a>
-              <Link to="/about">
+              <Link to="/about" className="w-full xs:w-auto">
                 <motion.div 
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-transparent border border-white/20 text-white/80 px-6 py-2 rounded-md font-medium transition duration-300 cursor-pointer"
+                  className="bg-transparent border border-white/20 text-white/80 px-6 py-2 rounded-md font-medium transition duration-300 cursor-pointer text-center"
                 >
                   Learn More
                 </motion.div>
@@ -252,7 +259,7 @@ const HomePage = () => {
             </motion.div>
           </motion.div>
           <motion.div 
-            className="md:w-1/2 flex justify-center"
+            className="w-full md:w-1/2 flex justify-center"
             variants={logoVariants}
             initial="hidden"
             animate="visible"
@@ -261,7 +268,7 @@ const HomePage = () => {
             <img 
               src="https://techtribecheck.netlify.app/lovable-uploads/21ef0c51-1eeb-42ba-8098-a0318aa2c3b7.png" 
               alt="Tech Tribe Logo" 
-              className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-[0_0_15px_rgba(255,51,51,0.3)]" 
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-[0_0_15px_rgba(255,51,51,0.3)]" 
             />
           </motion.div>
         </motion.div>
@@ -271,23 +278,23 @@ const HomePage = () => {
       <motion.section 
         ref={statsRef}
         variants={itemVariants}
-        className="mb-16"
+        className="mb-12 md:mb-16"
       >
         <motion.div 
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6"
         >
           <motion.div 
             variants={itemVariants}
             whileHover={{ scale: 1.03 }}
-            className="bg-[#1d1d1d] rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center"
+            className="bg-[#1d1d1d] rounded-lg shadow-md p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center text-center"
           >
-            <div className="w-12 h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-5xl font-bold text-white mb-2">
+            <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-1 sm:mb-2">
               {isStatsInView ? (
                 <>
                   <CountUp 
@@ -302,20 +309,20 @@ const HomePage = () => {
                 <span>{stats.events}{stats.events > 0 ? "+" : ""}</span>
               )}
             </h3>
-            <p className="text-white/60">Events Organized</p>
+            <p className="text-xs sm:text-sm md:text-base text-white/60">Events Organized</p>
           </motion.div>
 
           <motion.div 
             variants={itemVariants}
             whileHover={{ scale: 1.03 }}
-            className="bg-[#1d1d1d] rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center"
+            className="bg-[#1d1d1d] rounded-lg shadow-md p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center text-center"
           >
-            <div className="w-12 h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <h3 className="text-5xl font-bold text-white mb-2">
+            <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-1 sm:mb-2">
               {isStatsInView ? (
                 <CountUp 
                   start={0} 
@@ -327,20 +334,20 @@ const HomePage = () => {
                 <span>{stats.teamMembers}</span>
               )}
             </h3>
-            <p className="text-white/60">Team Members</p>
+            <p className="text-xs sm:text-sm md:text-base text-white/60">Team Members</p>
           </motion.div>
 
           <motion.div 
             variants={itemVariants}
             whileHover={{ scale: 1.03 }}
-            className="bg-[#1d1d1d] rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center"
+            className="bg-[#1d1d1d] rounded-lg shadow-md p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center text-center"
           >
-            <div className="w-12 h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary-900/60 rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
-            <h3 className="text-5xl font-bold text-white mb-2">
+            <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-1 sm:mb-2">
               {isStatsInView ? (
                 <>
                   <CountUp 
@@ -355,7 +362,7 @@ const HomePage = () => {
                 <span>{stats.organizations}{stats.organizations > 0 ? "+" : ""}</span>
               )}
             </h3>
-            <p className="text-white/60">Organizations</p>
+            <p className="text-xs sm:text-sm md:text-base text-white/60">Organizations</p>
           </motion.div>
         </motion.div>
       </motion.section>
@@ -363,12 +370,12 @@ const HomePage = () => {
       {/* Featured Events Section */}
       <motion.section 
         variants={itemVariants}
-        className="mb-16"
+        className="mb-12 md:mb-16"
       >
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary-500">Upcoming Events</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-primary-500">Upcoming Events</h2>
         <motion.div 
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
           {featuredEvents.length > 0 ? (
             featuredEvents.map((event) => (
@@ -378,12 +385,12 @@ const HomePage = () => {
                 whileHover={{ y: -5 }}
                 className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
               >
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-primary-500">{event.eventTitle}</h3>
-                  <p className="text-white/70 mb-4">{new Date(event.date).toLocaleDateString()} • {event.time}</p>
-                  <p className="text-white/90 mb-4 line-clamp-3">{event.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-primary-400 font-medium">{event.price}</span>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 text-primary-500">{event.eventTitle}</h3>
+                  <p className="text-sm text-white/70 mb-2 sm:mb-4">{new Date(event.date).toLocaleDateString()} • {event.time}</p>
+                  <p className="text-sm sm:text-base text-white/90 mb-3 sm:mb-4 line-clamp-3">{event.description}</p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <span className="text-sm text-primary-400 font-medium">{event.price}</span>
                     <motion.a
                       href={event.url || '#'}
                       target="_blank"
@@ -392,7 +399,7 @@ const HomePage = () => {
                       whileTap={{ scale: 0.95 }}
                       className={`
                         ${event.url ? 'bg-primary-600' : 'bg-dark-400 cursor-not-allowed'} 
-                        text-white px-4 py-2 rounded-md transition duration-300
+                        text-white text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-md transition duration-300
                       `}
                     >
                       Register Now
@@ -402,20 +409,20 @@ const HomePage = () => {
               </motion.div>
             ))
           ) : (
-            <div className="col-span-1 lg:col-span-3 text-center py-10 bg-[#1d1d1d] rounded-lg">
-              <p className="text-white/70">No upcoming events at the moment. Check back soon!</p>
+            <div className="col-span-1 lg:col-span-3 text-center py-8 sm:py-10 bg-[#1d1d1d] rounded-lg">
+              <p className="text-sm sm:text-base text-white/70">No upcoming events at the moment. Check back soon!</p>
             </div>
           )}
         </motion.div>
         <motion.div 
           variants={itemVariants}
-          className="mt-6 text-center"
+          className="mt-4 sm:mt-6 text-center"
         >
           <Link to="/events">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 text-white px-6 py-2 rounded-md font-medium transition duration-300"
+              className="bg-primary-600 text-white text-sm sm:text-base px-5 sm:px-6 py-1.5 sm:py-2 rounded-md font-medium transition duration-300"
             >
               View All Events
             </motion.button>
@@ -426,19 +433,19 @@ const HomePage = () => {
       {/* Featured Founders Section */}
       <motion.section 
         variants={itemVariants}
-        className="mb-16"
+        className="mb-12 md:mb-16"
       >
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary-500">Our Founders</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-primary-500">Our Founders</h2>
         <motion.div 
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"
         >
           {featuredFounders.length > 0 ? (
             featuredFounders.map((founder) => (
               <motion.div
                 key={founder._id}
                 variants={itemVariants}
-                className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden"
+                className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
               >
                 <div className="aspect-[3/4] flex items-center justify-center bg-black/20">
                   <img 
@@ -447,30 +454,30 @@ const HomePage = () => {
                     className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-1 text-white">{founder.name}</h3>
-                  <p className="text-primary-400 mb-4">{founder.role}</p>
-                  <p className="text-white/80 line-clamp-3">{founder.description}</p>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-0.5 sm:mb-1 text-white">{founder.name}</h3>
+                  <p className="text-xs sm:text-sm text-primary-500 mb-2 sm:mb-3">{founder.role}</p>
+                  <p className="text-xs sm:text-sm text-white/90 line-clamp-3">{founder.description}</p>
                 </div>
               </motion.div>
             ))
           ) : (
-            <div className="col-span-1 md:col-span-3 text-center py-10 bg-[#181818] rounded-lg">
-              <p className="text-white/70">Founder information coming soon!</p>
+            <div className="col-span-1 md:col-span-3 text-center py-8 sm:py-10 bg-[#1d1d1d] rounded-lg">
+              <p className="text-sm sm:text-base text-white/70">Founder information coming soon!</p>
             </div>
           )}
         </motion.div>
         <motion.div 
           variants={itemVariants}
-          className="mt-6 text-center"
+          className="mt-4 sm:mt-6 text-center"
         >
           <Link to="/founders">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 text-white px-6 py-2 rounded-md font-medium transition duration-300"
+              className="bg-primary-600 text-white text-sm sm:text-base px-5 sm:px-6 py-1.5 sm:py-2 rounded-md font-medium transition duration-300"
             >
-              Meet All Founders
+              View All Founders
             </motion.button>
           </Link>
         </motion.div>

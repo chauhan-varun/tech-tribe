@@ -214,10 +214,10 @@ const AboutPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.6 }}
-          className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-center max-w-4xl mx-auto"
+          className="bg-[#181818] rounded-2xl p-6 sm:p-8 md:p-12 shadow-md text-center max-w-4xl mx-auto"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-primary-500">Our Community</h2>
-          <p className="text-white/80 mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-primary-500">Our Community</h2>
+          <p className="text-white/80 text-sm sm:text-base mb-6 sm:mb-8">
             Whether you're a seasoned professional or just starting out in tech, there's a place for you in our community.
             Join us to learn, connect, and grow together.
           </p>

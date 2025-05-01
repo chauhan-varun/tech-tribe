@@ -62,13 +62,13 @@ const FoundersPage = () => {
       {/* Hero Section */}
       <motion.section 
         variants={itemVariants}
-        className="mb-12"
+        className="mb-8 sm:mb-12"
       >
         <motion.div
-          className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-white text-center"
+          className="bg-[#181818] rounded-2xl p-6 sm:p-8 md:p-12 shadow-md text-white text-center"
         >
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Meet Our Founders</h1>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4">Meet Our Founders</h1>
+          <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto">
             The visionaries who created Tech Tribe and lead our growing community
           </p>
         </motion.div>
@@ -89,7 +89,7 @@ const FoundersPage = () => {
         ) : (
           <motion.div 
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8"
           >
             {founders.map((founder, index) => (
               <motion.div
@@ -107,18 +107,18 @@ const FoundersPage = () => {
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <p className="text-white text-sm">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                      <p className="text-white text-xs sm:text-sm">
                         {founder.description}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white">{founder.name}</h3>
-                  <p className="text-primary-500 mt-1">{founder.role}</p>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">{founder.name}</h3>
+                  <p className="text-primary-500 text-sm sm:text-base mt-1">{founder.role}</p>
                   
-                  <div className="mt-6 flex space-x-4">
+                  <div className="mt-4 sm:mt-6 flex space-x-3 sm:space-x-4">
                     <motion.a 
                       href="#" 
                       whileHover={{ scale: 1.1 }}

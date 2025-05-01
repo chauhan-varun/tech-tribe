@@ -89,26 +89,27 @@ const OrganizationPage = () => {
         ) : (
           <motion.div 
             variants={containerVariants}
-            className="space-y-12"
+            className="space-y-8"
           >
             {organizations.map((org, index) => (
               <motion.div
                 key={org._id}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
-                className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden"
+                className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
               >
                 <div className="md:flex">
-                  <div className="md:w-1/3 h-64 md:h-auto">
+                  <div className="md:w-1/4 lg:w-1/5 h-48 md:h-auto relative overflow-hidden">
+                    <div className="absolute inset-0 bg-black/10"></div>
                     <img 
                       src={org.image} 
                       alt={org.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain md:object-cover"
                     />
                   </div>
-                  <div className="md:w-2/3 p-6 md:p-8">
-                    <h2 className="text-2xl font-bold text-white mb-4">{org.title}</h2>
-                    <p className="text-white/80 mb-6">{org.description}</p>
+                  <div className="md:w-3/4 lg:w-4/5 p-5 md:p-6">
+                    <h2 className="text-xl font-bold text-white mb-3">{org.title}</h2>
+                    <p className="text-white/80 text-sm mb-4 line-clamp-3 md:line-clamp-none">{org.description}</p>
                     <div className="flex space-x-4">
                       <motion.a
                         href="#"
