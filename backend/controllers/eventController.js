@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const { cloudinary } = require('../config/cloudinary');
 
 // @desc    Get all events
 // @route   GET /api/events
@@ -38,7 +39,8 @@ const createEvent = async (req, res) => {
   try {
     const { eventTitle, description, date, time, location, price, url } = req.body;
     
-    const newEvent = new Event({
+    // Initialize event object
+    const eventData = {
       eventTitle,
       description,
       date,
@@ -46,7 +48,14 @@ const createEvent = async (req, res) => {
       location,
       price,
       url
-    });
+    };
+    
+    // Handle image upload if present
+    if (req.file) {
+      eventData.image = req.file.path;
+    }
+    
+    const newEvent = new Event(eventData);
     
     const savedEvent = await newEvent.save();
     res.status(201).json(savedEvent);
@@ -77,6 +86,18 @@ const updateEvent = async (req, res) => {
     event.price = price || event.price;
     event.url = url || event.url;
     
+    // Handle image upload if a new file is provided
+    if (req.file) {
+      // Delete previous image from Cloudinary if it exists
+      if (event.image) {
+        const publicId = event.image.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`tech-tribe/${publicId}`);
+      }
+      
+      // Set the new image path
+      event.image = req.file.path;
+    }
+    
     const updatedEvent = await event.save();
     res.json(updatedEvent);
   } catch (error) {
@@ -90,11 +111,20 @@ const updateEvent = async (req, res) => {
 // @access  Private/Admin
 const deleteEvent = async (req, res) => {
   try {
-    const event = await Event.findByIdAndDelete(req.params.id);
+    const event = await Event.findById(req.params.id);
     
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
+    
+    // Delete image from Cloudinary if it exists
+    if (event.image) {
+      const publicId = event.image.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(`tech-tribe/${publicId}`);
+    }
+    
+    // Delete the event document
+    await Event.findByIdAndDelete(req.params.id);
     
     res.json({ message: 'Event removed' });
   } catch (error) {

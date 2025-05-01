@@ -109,6 +109,15 @@ const EventsPage = () => {
                 whileHover={{ y: -5 }}
                 className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
               >
+                {event.image && (
+                  <div className="w-full h-48 overflow-hidden">
+                    <img 
+                      src={event.image} 
+                      alt={event.eventTitle} 
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                )}
                 <div className="p-4 sm:p-6">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 sm:mb-4">
                     <div>

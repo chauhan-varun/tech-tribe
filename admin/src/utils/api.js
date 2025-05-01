@@ -222,9 +222,13 @@ export const getEventById = async (id) => {
   }
 };
 
-export const createEvent = async (eventData) => {
+export const createEvent = async (formData) => {
   try {
-    const response = await api.post('/events', eventData);
+    const response = await api.post('/events', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error creating event:', error);
@@ -232,9 +236,13 @@ export const createEvent = async (eventData) => {
   }
 };
 
-export const updateEvent = async (id, eventData) => {
+export const updateEvent = async (id, formData) => {
   try {
-    const response = await api.put(`/events/${id}`, eventData);
+    const response = await api.put(`/events/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error updating event:', error);

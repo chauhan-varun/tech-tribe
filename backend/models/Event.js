@@ -28,6 +28,10 @@ const eventSchema = new mongoose.Schema({
   url: {
     type: String,
     default: ''
+  },
+  image: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

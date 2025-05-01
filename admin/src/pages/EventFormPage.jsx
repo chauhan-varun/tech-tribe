@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { getEventById, createEvent, updateEvent } from '../utils/api';
-import { FaArrowLeft, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTicketAlt, FaLink } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTicketAlt, FaLink, FaImage, FaUpload } from 'react-icons/fa';
 
 const FormContainer = styled.div``;
 
@@ -91,6 +91,80 @@ const ButtonGroup = styled.div`
   margin-top: 1rem;
 `;
 
+const ImageUploadContainer = styled.div`
+  margin-bottom: 1.5rem;
+  
+  .image-upload-area {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    
+    &:hover {
+      border-color: var(--accent-color);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    input {
+      display: none;
+    }
+    
+    .upload-icon {
+      font-size: 2rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      margin-bottom: 0.5rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .btn {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+`;
+
+const ImagePreview = styled.div`
+  margin-top: 1rem;
+  position: relative;
+  
+  img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  .remove-image {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    
+    &:hover {
+      background-color: var(--danger-color);
+    }
+  }
+`;
+
 const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -116,6 +190,7 @@ const EventFormPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
+  const fileInputRef = useRef(null);
   
   const [formData, setFormData] = useState({
     eventTitle: '',
@@ -126,6 +201,8 @@ const EventFormPage = () => {
     price: '',
     url: ''
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(isEditMode);
@@ -154,6 +231,11 @@ const EventFormPage = () => {
         url: data.url || ''
       });
       
+      // Set image preview if event has an image
+      if (data.image) {
+        setImagePreview(data.image);
+      }
+      
       setInitialLoading(false);
     } catch (error) {
       console.error('Error fetching event:', error);
@@ -169,6 +251,39 @@ const EventFormPage = () => {
     // Clear error when field is edited
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+  
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      
+      // Create image preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Clear any image upload errors
+      if (errors.image) {
+        setErrors(prev => ({ ...prev, image: '' }));
+      }
+    }
+  };
+  
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+  
+  const handleImageAreaClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
   
@@ -208,21 +323,34 @@ const EventFormPage = () => {
     
     if (!validateForm()) return;
     
+    setLoading(true);
+    
     try {
-      setLoading(true);
+      // Create FormData object to handle file upload
+      const eventFormData = new FormData();
+      
+      // Add all form fields to FormData
+      Object.keys(formData).forEach(key => {
+        eventFormData.append(key, formData[key]);
+      });
+      
+      // Add image file if one is selected
+      if (imageFile) {
+        eventFormData.append('image', imageFile);
+      }
       
       if (isEditMode) {
-        await updateEvent(id, formData);
+        await updateEvent(id, eventFormData);
         toast.success('Event updated successfully');
       } else {
-        await createEvent(formData);
+        await createEvent(eventFormData);
         toast.success('Event created successfully');
       }
       
       navigate('/events');
     } catch (error) {
       console.error('Error saving event:', error);
-      toast.error(isEditMode ? 'Failed to update event' : 'Failed to create event');
+      toast.error('Failed to save event');
     } finally {
       setLoading(false);
     }
@@ -265,6 +393,51 @@ const EventFormPage = () => {
             />
             {errors.eventTitle && <div className="error">{errors.eventTitle}</div>}
           </FormGroup>
+          
+          <ImageUploadContainer>
+            <label htmlFor="image">
+              <FaImage /> Event Image
+            </label>
+            <div 
+              className="image-upload-area" 
+              onClick={handleImageAreaClick}
+            >
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+              />
+              
+              {!imagePreview ? (
+                <>
+                  <FaUpload className="upload-icon" />
+                  <p>Click to upload event image</p>
+                  <p className="small">Supports: JPG, JPEG, PNG</p>
+                  <button type="button" className="btn">
+                    <FaUpload /> Choose Image
+                  </button>
+                </>
+              ) : (
+                <ImagePreview>
+                  <img src={imagePreview} alt="Event preview" />
+                  <button 
+                    type="button" 
+                    className="remove-image" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveImage();
+                    }}
+                  >
+                    &times;
+                  </button>
+                </ImagePreview>
+              )}
+            </div>
+            {errors.image && <div className="error">{errors.image}</div>}
+          </ImageUploadContainer>
           
           <FormGroup>
             <label htmlFor="description">Description</label>
