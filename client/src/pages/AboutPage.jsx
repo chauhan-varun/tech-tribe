@@ -216,18 +216,27 @@ const AboutPage = () => {
           transition={{ duration: 0.7, delay: 0.6 }}
           className="bg-[#181818] rounded-2xl p-8 md:p-12 shadow-md text-center max-w-4xl mx-auto"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-primary-500">Join Our Community</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-primary-500">Our Community</h2>
           <p className="text-white/80 mb-8">
             Whether you're a seasoned professional or just starting out in tech, there's a place for you in our community.
             Join us to learn, connect, and grow together.
           </p>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
+          <motion.a 
+            href="https://chat.whatsapp.com/I6YpsX5z3GP6oKlGGw26ka"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ 
+              scale: 1.05, 
+              boxShadow: "0 10px 25px -5px rgba(255, 51, 51, 0.4)"
+            }}
             whileTap={{ scale: 0.95 }}
-            className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold shadow-sm transition duration-300"
+            className="bg-gradient-to-r from-primary-600 to-primary-500 text-white px-10 py-4 rounded-lg font-semibold shadow-lg transition duration-300 inline-flex items-center justify-center space-x-2 hover:from-primary-500 hover:to-primary-600 transform hover:-translate-y-1"
           >
-            Become a Member
-          </motion.button>
+            <span>Join us on Whatsapp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </motion.a>
         </motion.div>
       </section>
     </motion.div>

@@ -220,10 +220,13 @@ const HomePage = () => {
               Learning together. Building together. Growing together.
             </motion.p>
             <motion.div variants={childVariants} className="flex space-x-4">
-              <motion.button 
+              <motion.a 
+                href="https://chat.whatsapp.com/I6YpsX5z3GP6oKlGGw26ka"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, backgroundColor: "#cc0000" }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-primary-600 text-white px-6 py-2 rounded-md font-medium transition duration-300 flex items-center"
+                className="bg-primary-600 text-white px-6 py-2 rounded-md font-medium transition duration-300 flex items-center cursor-pointer"
               >
                 Join Our Community
                 <motion.svg 
@@ -236,14 +239,16 @@ const HomePage = () => {
                 >
                   <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </motion.svg>
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-transparent border border-white/20 text-white/80 px-6 py-2 rounded-md font-medium transition duration-300"
-              >
-                Learn More
-              </motion.button>
+              </motion.a>
+              <Link to="/about">
+                <motion.div 
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-transparent border border-white/20 text-white/80 px-6 py-2 rounded-md font-medium transition duration-300 cursor-pointer"
+                >
+                  Learn More
+                </motion.div>
+              </Link>
             </motion.div>
           </motion.div>
           <motion.div 
