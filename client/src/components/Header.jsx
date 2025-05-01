@@ -76,7 +76,7 @@ const Header = () => {
       }`}
       style={{
         backdropFilter: scrolled ? 'blur(20px)' : 'blur(16px)',
-        backgroundColor: scrolled ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.2)'
+        backgroundColor: scrolled ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.1)'
       }}
     >
       <div className="container mx-auto px-4">
@@ -170,7 +170,11 @@ const Header = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-black/90 backdrop-blur-xl border-t border-gray-800/50"
+            className="md:hidden border-t border-gray-800/20 z-50 shadow-xl"
+            style={{
+              backdropFilter: 'blur(16px)',
+              backgroundColor: 'rgba(0, 0, 0, 0.1)'
+            }}
           >
             <div className="container mx-auto px-4 py-3">
               <nav className="flex flex-col space-y-4 py-3">
