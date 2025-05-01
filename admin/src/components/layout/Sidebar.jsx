@@ -18,10 +18,47 @@ const SidebarContainer = styled.div`
   height: 100vh;
   position: fixed;
   top: 0;
-  left: 0;
+  left: ${({ $isOpen }) => ($isOpen ? '0' : '-250px')};
   padding: 2rem 0;
   overflow-y: auto;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  
+  @media (max-width: 768px) {
+    left: ${({ $isOpen }) => ($isOpen ? '0' : '-250px')};
+  }
+`;
+
+const Overlay = styled.div`
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const Logo = styled.div`
@@ -110,59 +147,70 @@ const LogoutButton = styled.button`
   }
 `;
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { currentUser, logout } = useAuth();
   
   const handleLogout = () => {
     logout();
   };
   
+  const handleOverlayClick = () => {
+    if (window.innerWidth <= 768) {
+      toggleSidebar();
+    }
+  };
+  
   return (
-    <SidebarContainer>
-      <Logo>
-        Tech<span>Tribe</span> Admin
-      </Logo>
-      
-      {currentUser && (
-        <UserInfo>
-          <div className="user-name">{currentUser.username || 'Admin User'}</div>
-          <div className="user-role">Administrator</div>
-        </UserInfo>
-      )}
-      
-      <MenuSection>
-        <h3>Main</h3>
-        <MenuItem to="/dashboard">
-          <FaHome /> Dashboard
-        </MenuItem>
-      </MenuSection>
-      
-      <MenuSection>
-        <h3>Management</h3>
-        <MenuItem to="/team-members">
-          <FaUsers /> Team Members
-        </MenuItem>
-        <MenuItem to="/events">
-          <FaCalendarAlt /> Events
-        </MenuItem>
-        <MenuItem to="/organization">
-          <FaBuilding /> Organization
-        </MenuItem>
-        <MenuItem to="/founders">
-          <FaUserTie /> Founders
-        </MenuItem>
-      </MenuSection>
-      
-      <MenuSection>
-        <h3>Account</h3>
-        <MenuItem to="/settings">
-          <FaCog /> Settings
-        </MenuItem>
-        <LogoutButton onClick={handleLogout}>
-          <FaSignOutAlt /> Logout
-        </LogoutButton>
-      </MenuSection>
-    </SidebarContainer>
+    <>
+      <Overlay $isOpen={isOpen} onClick={handleOverlayClick} />
+      <SidebarContainer $isOpen={isOpen}>
+        <CloseButton onClick={toggleSidebar}>×</CloseButton>
+        
+        <Logo>
+          Tech<span>Tribe</span> Admin
+        </Logo>
+        
+        {currentUser && (
+          <UserInfo>
+            <div className="user-name">{currentUser.username || 'Admin User'}</div>
+            <div className="user-role">Administrator</div>
+          </UserInfo>
+        )}
+        
+        <MenuSection>
+          <h3>Main</h3>
+          <MenuItem to="/dashboard">
+            <FaHome /> Dashboard
+          </MenuItem>
+        </MenuSection>
+        
+        <MenuSection>
+          <h3>Management</h3>
+          <MenuItem to="/team-members">
+            <FaUsers /> Team Members
+          </MenuItem>
+          <MenuItem to="/events">
+            <FaCalendarAlt /> Events
+          </MenuItem>
+          <MenuItem to="/organization">
+            <FaBuilding /> Organization
+          </MenuItem>
+          <MenuItem to="/founders">
+            <FaUserTie /> Founders
+          </MenuItem>
+        </MenuSection>
+        
+        <MenuSection>
+          <h3>Account</h3>
+          <MenuItem to="/settings">
+            <FaCog /> Settings
+          </MenuItem>
+          <LogoutButton onClick={handleLogout}>
+            <FaSignOutAlt /> Logout
+          </LogoutButton>
+        </MenuSection>
+      </SidebarContainer>
+    </>
   );
 };
 

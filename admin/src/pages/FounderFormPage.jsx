@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import { getFounderById, createFounder, updateFounder } from '../utils/api';
 import { FaArrowLeft, FaUpload, FaUserTie } from 'react-icons/fa';
 
-const FormContainer = styled.div``;
+const FormContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
 
 const Header = styled.div`
   display: flex;
@@ -24,6 +28,14 @@ const Header = styled.div`
       color: var(--accent-color);
     }
   }
+  
+  h1 {
+    font-size: 1.5rem;
+    
+    @media (max-width: 576px) {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 const FormCard = styled.div`
@@ -31,11 +43,23 @@ const FormCard = styled.div`
   border-radius: 10px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 576px) {
+    padding: 1rem;
+  }
 `;
 
 const Form = styled.form`
   display: grid;
   gap: 1.5rem;
+  
+  @media (max-width: 576px) {
+    gap: 1rem;
+  }
 `;
 
 const FormGroup = styled.div`
@@ -58,11 +82,19 @@ const FormGroup = styled.div`
       outline: none;
       border-color: var(--accent-color);
     }
+    
+    @media (max-width: 576px) {
+      padding: 0.6rem;
+    }
   }
   
   textarea {
     min-height: 150px;
     resize: vertical;
+    
+    @media (max-width: 768px) {
+      min-height: 100px;
+    }
   }
   
   .error {
@@ -84,6 +116,14 @@ const FormRow = styled.div`
 
 const ImageUploadContainer = styled.div`
   margin-bottom: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  @media (max-width: 576px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const ImagePreview = styled.div`
@@ -100,6 +140,16 @@ const ImagePreview = styled.div`
   justify-content: center;
   align-items: center;
   
+  @media (max-width: 768px) {
+    max-width: 250px;
+    height: 250px;
+  }
+  
+  @media (max-width: 576px) {
+    max-width: 200px;
+    height: 200px;
+  }
+  
   img {
     width: 100%;
     height: 100%;
@@ -107,16 +157,20 @@ const ImagePreview = styled.div`
   }
   
   .placeholder {
-    text-align: center;
     color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
     
     svg {
       font-size: 3rem;
       margin-bottom: 1rem;
-    }
-    
-    p {
-      font-size: 0.9rem;
+      
+      @media (max-width: 576px) {
+        font-size: 2rem;
+      }
     }
   }
 `;
@@ -126,25 +180,58 @@ const UploadButton = styled.label`
   align-items: center;
   gap: 0.5rem;
   background-color: var(--accent-color);
-  color: var(--text-color);
+  color: white;
   padding: 0.8rem 1.5rem;
   border-radius: 5px;
   cursor: pointer;
   transition: var(--transition);
+  font-weight: 500;
   
   &:hover {
-    background-color: #cc0000;
+    background-color: var(--accent-hover);
   }
   
-  input[type="file"] {
+  input {
     display: none;
+  }
+  
+  @media (max-width: 576px) {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  
+  @media (max-width: 576px) {
+    flex-direction: column;
+    margin-top: 1.5rem;
+  }
+`;
+
+const Button = styled.button`
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 576px) {
+    padding: 0.7rem 1.2rem;
+    width: 100%;
+  }
 `;
 
 const LoadingContainer = styled.div`
@@ -395,21 +482,21 @@ const FounderFormPage = () => {
           </FormGroup>
           
           <ButtonGroup>
-            <button
+            <Button
               type="button"
               className="btn secondary-btn"
               onClick={goBack}
               disabled={loading}
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className="btn"
               disabled={loading}
             >
               {loading ? 'Saving...' : isEditMode ? 'Update' : 'Create'}
-            </button>
+            </Button>
           </ButtonGroup>
         </Form>
       </FormCard>

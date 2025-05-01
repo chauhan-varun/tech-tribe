@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import { getOrganizations, deleteOrganization } from '../utils/api';
 import { FaPlus, FaEdit, FaTrash, FaBuilding } from 'react-icons/fa';
 
-const OrganizationContainer = styled.div``;
+const OrganizationContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
 
 const Header = styled.div`
   display: flex;
@@ -17,6 +21,42 @@ const Header = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    
+    a, button {
+      width: 100%;
+    }
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 600;
+  
+  @media (max-width: 576px) {
+    font-size: 1.2rem;
+  }
+`;
+
+const Button = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  
+  &:hover {
+    background-color: var(--accent-hover);
+  }
+  
+  @media (max-width: 576px) {
+    padding: 0.7rem 1.2rem;
+    justify-content: center;
   }
 `;
 
@@ -26,6 +66,11 @@ const OrganizationCard = styled.div`
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const CardHeader = styled.div`
@@ -38,6 +83,11 @@ const CardHeader = styled.div`
   h2 {
     display: flex;
     align-items: center;
+    font-size: 1.2rem;
+    
+    @media (max-width: 576px) {
+      font-size: 1rem;
+    }
     
     svg {
       margin-right: 0.8rem;
@@ -58,6 +108,8 @@ const CardContent = styled.div`
   
   @media (max-width: 768px) {
     flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
   }
 `;
 
@@ -68,8 +120,14 @@ const ImageContainer = styled.div`
   overflow: hidden;
   background-color: var(--secondary-bg);
   
+  @media (max-width: 992px) {
+    width: 250px;
+    height: 180px;
+  }
+  
   @media (max-width: 768px) {
     width: 100%;
+    height: 200px;
   }
   
   img {
@@ -84,11 +142,22 @@ const OrganizationDetails = styled.div`
   
   h3 {
     margin-bottom: 1rem;
+    font-size: 1.2rem;
+    
+    @media (max-width: 576px) {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
   }
   
   p {
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.6;
+    font-size: 0.95rem;
+    
+    @media (max-width: 576px) {
+      font-size: 0.9rem;
+    }
   }
 `;
 
@@ -100,103 +169,25 @@ const ActionButton = styled.button`
   padding: 0.5rem;
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &:hover {
-    opacity: 0.8;
-  }
-  
-  svg {
-    font-size: 1rem;
-  }
-`;
-
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 3rem;
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  margin-bottom: 2rem;
-  
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
-  }
-  
-  p {
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-  
-  .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top: 4px solid var(--accent-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
-
-const ConfirmationModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  
-  .modal-content {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 500px;
-    
-    h3 {
-      margin-bottom: 1rem;
-      color: var(--danger-color);
-    }
-    
-    p {
-      margin-bottom: 2rem;
-    }
-    
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-    }
+    opacity: 0.85;
+    transform: translateY(-2px);
   }
 `;
 
 const OrganizationPage = () => {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [orgToDelete, setOrgToDelete] = useState(null);
-  
+  const [deleting, setDeleting] = useState(false);
+
   useEffect(() => {
     fetchOrganizations();
   }, []);
-  
+
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
@@ -205,90 +196,71 @@ const OrganizationPage = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching organizations:', error);
-      setError('Failed to load organization information. Please try again.');
+      toast.error('Failed to load organizations');
       setLoading(false);
     }
   };
-  
-  const handleDeleteClick = (org) => {
-    setOrgToDelete(org);
-    setShowDeleteModal(true);
-  };
-  
-  const handleDeleteConfirm = async () => {
-    if (!orgToDelete) return;
-    
-    try {
-      await deleteOrganization(orgToDelete._id);
-      setOrganizations(prev => prev.filter(o => o._id !== orgToDelete._id));
-      toast.success('Organization deleted successfully');
-      setShowDeleteModal(false);
-      setOrgToDelete(null);
-    } catch (error) {
-      console.error('Error deleting organization:', error);
-      toast.error('Failed to delete organization');
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this organization?')) {
+      try {
+        setDeleting(true);
+        await deleteOrganization(id);
+        setDeleting(false);
+        toast.success('Organization deleted successfully');
+        fetchOrganizations();
+      } catch (error) {
+        console.error('Error deleting organization:', error);
+        toast.error('Failed to delete organization');
+        setDeleting(false);
+      }
     }
   };
-  
-  const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
-    setOrgToDelete(null);
-  };
-  
-  if (loading) {
-    return (
-      <OrganizationContainer>
-        <LoadingContainer>
-          <div className="spinner"></div>
-        </LoadingContainer>
-      </OrganizationContainer>
-    );
-  }
-  
-  if (error) {
-    return (
-      <OrganizationContainer>
-        <EmptyState>
-          <h3>Error</h3>
-          <p>{error}</p>
-          <button className="btn" onClick={fetchOrganizations}>Try Again</button>
-        </EmptyState>
-      </OrganizationContainer>
-    );
-  }
-  
+
   return (
     <OrganizationContainer>
       <Header>
-        <h1>Organization</h1>
-        <Link to="/organization/new" className="btn">
-          <FaPlus style={{ marginRight: '0.5rem' }} />
-          Add Organization
+        <Title>Organizations</Title>
+        <Link to="/organization/new">
+          <Button>
+            <FaPlus /> Add Organization
+          </Button>
         </Link>
       </Header>
-      
-      {organizations.length === 0 ? (
-        <EmptyState>
-          <h3>No Organization Information</h3>
-          <p>You haven't added organization information yet.</p>
-        </EmptyState>
+
+      {loading ? (
+        <div className="text-center my-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : organizations.length === 0 ? (
+        <div className="text-center my-5">
+          <FaBuilding size={50} className="text-muted mb-3" />
+          <h3>No Organizations Yet</h3>
+          <p className="text-muted">Start by adding your first organization</p>
+          <Link to="/organization/new">
+            <Button>
+              <FaPlus /> Add Organization
+            </Button>
+          </Link>
+        </div>
       ) : (
-        organizations.map(org => (
+        organizations.map((org) => (
           <OrganizationCard key={org._id}>
             <CardHeader>
-              <h2>
-                <FaBuilding />
-                {org.title}
-              </h2>
+              <h2><FaBuilding /> {org.title || org.name}</h2>
               <div className="actions">
                 <Link to={`/organization/${org._id}`}>
-                  <ActionButton color="#2196f3">
+                  <ActionButton title="Edit">
                     <FaEdit />
                   </ActionButton>
                 </Link>
                 <ActionButton 
                   color="var(--danger-color)" 
-                  onClick={() => handleDeleteClick(org)}
+                  onClick={() => handleDelete(org._id)}
+                  disabled={deleting}
+                  title="Delete"
                 >
                   <FaTrash />
                 </ActionButton>
@@ -296,41 +268,19 @@ const OrganizationPage = () => {
             </CardHeader>
             <CardContent>
               <ImageContainer>
-                <img src={org.image} alt={org.title} />
+                {org.image ? (
+                  <img src={org.image} alt={org.title || org.name} />
+                ) : (
+                  <div className="placeholder">No Image</div>
+                )}
               </ImageContainer>
               <OrganizationDetails>
                 <h3>About</h3>
-                <p>{org.description}</p>
+                <p>{org.description || 'No description available'}</p>
               </OrganizationDetails>
             </CardContent>
           </OrganizationCard>
         ))
-      )}
-      
-      {showDeleteModal && (
-        <ConfirmationModal>
-          <div className="modal-content">
-            <h3>Delete Organization</h3>
-            <p>
-              Are you sure you want to delete <strong>{orgToDelete?.title}</strong>?
-              This action cannot be undone.
-            </p>
-            <div className="modal-actions">
-              <button 
-                className="btn secondary-btn"
-                onClick={handleDeleteCancel}
-              >
-                Cancel
-              </button>
-              <button 
-                className="btn btn-danger"
-                onClick={handleDeleteConfirm}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </ConfirmationModal>
       )}
     </OrganizationContainer>
   );

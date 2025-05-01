@@ -13,7 +13,17 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 90;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-left: 250px;
+  margin-left: ${({ $sidebarOpen }) => ($sidebarOpen ? '250px' : '0')};
+  transition: margin-left 0.3s ease;
+  
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  @media (max-width: 576px) {
+    padding: 0.75rem;
+  }
 `;
 
 const ToggleButton = styled.button`
@@ -23,10 +33,22 @@ const ToggleButton = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.5rem;
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
-  @media (max-width: 768px) {
-    display: block;
+  &:hover {
+    color: var(--accent-color);
+  }
+`;
+
+const PageTitle = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  
+  @media (max-width: 576px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -34,6 +56,10 @@ const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  
+  @media (max-width: 576px) {
+    gap: 0.5rem;
+  }
 `;
 
 const IconButton = styled.button`
@@ -148,17 +174,12 @@ const DropdownItem = styled.button`
   }
 `;
 
-const PageTitle = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 500;
-`;
-
-const Header = ({ title, toggleSidebar }) => {
+const Header = ({ title, toggleSidebar, sidebarOpen }) => {
   const { currentUser, logout } = useAuth();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setDropdownOpen(!dropdownOpen);
   };
   
   const handleLogout = () => {
@@ -166,12 +187,12 @@ const Header = ({ title, toggleSidebar }) => {
   };
   
   return (
-    <HeaderContainer>
-      <div>
+    <HeaderContainer $sidebarOpen={sidebarOpen}>
+      <div className="d-flex align-items-center">
         <ToggleButton onClick={toggleSidebar}>
           <FaBars />
         </ToggleButton>
-        <PageTitle>{title || 'Dashboard'}</PageTitle>
+        <PageTitle>{title}</PageTitle>
       </div>
       
       <HeaderRight>
@@ -189,7 +210,7 @@ const Header = ({ title, toggleSidebar }) => {
             </div>
           </DropdownButton>
           
-          <DropdownMenu $isOpen={isDropdownOpen}>
+          <DropdownMenu $isOpen={dropdownOpen}>
             <DropdownItem>
               <FaUser /> My Profile
             </DropdownItem>

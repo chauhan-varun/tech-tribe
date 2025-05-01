@@ -14,27 +14,47 @@ const LayoutContainer = styled.div`
 
 const MainContent = styled.main`
   flex: 1;
-  margin-left: 250px;
+  margin-left: ${({ $sidebarOpen }) => ($sidebarOpen ? '250px' : '0')};
   padding: 0 0 2rem;
   transition: margin-left 0.3s ease;
+  width: calc(100% - ${({ $sidebarOpen }) => ($sidebarOpen ? '250px' : '0')});
   
   @media (max-width: 768px) {
-    margin-left: ${({ $sidebarOpen }) => ($sidebarOpen ? '250px' : '0')};
+    margin-left: 0;
+    width: 100%;
   }
 `;
 
 const ContentWrapper = styled.div`
-  padding: 2rem;
+  padding: 2rem 1rem;
+  
+  @media (max-width: 576px) {
+    padding: 1rem 0.5rem;
+  }
 `;
 
 const AdminLayout = () => {
   const { currentUser, loading } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [pageTitle, setPageTitle] = useState('Dashboard');
   
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  
+  // Update sidebar state on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Update title based on the current path
   useEffect(() => {
@@ -69,10 +89,10 @@ const AdminLayout = () => {
   
   return (
     <LayoutContainer>
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       
       <MainContent $sidebarOpen={sidebarOpen}>
-        <Header title={pageTitle} toggleSidebar={toggleSidebar} />
+        <Header title={pageTitle} toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>
