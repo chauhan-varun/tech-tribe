@@ -5,7 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(false);
   const location = useLocation();
+
+  // Initial load animation with delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setVisible(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,22 +43,48 @@ const Header = () => {
     { name: 'About', path: '/about' },
   ];
 
+  const variants = {
+    hidden: { 
+      opacity: 0,
+      y: -20,
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.07
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <motion.header 
+      initial="hidden"
+      animate={visible ? "visible" : "hidden"}
+      variants={variants}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'backdrop-blur-xl bg-black/80 shadow-lg py-3 border-b border-gray-800/50' 
-          : 'backdrop-blur-md bg-black/40 py-5'
+          ? 'shadow-xl py-3 border-b border-gray-800/50' 
+          : 'py-5'
       }`}
+      style={{
+        backdropFilter: scrolled ? 'blur(20px)' : 'blur(16px)',
+        backgroundColor: scrolled ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.2)'
+      }}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
+              variants={itemVariants}
               whileHover={{ scale: 1.05 }}
               className="flex items-center"
             >
@@ -57,8 +93,8 @@ const Header = () => {
                 alt="Tech Tribe Logo" 
                 className="h-10 w-auto mr-2" 
               />
-              <span className={`text-2xl font-bold ${scrolled ? 'text-white' : 'text-white'}`}>
-                <span className="text-white">Tech</span>Tribe
+              <span className="text-2xl font-bold text-white">
+                <span className="text-primary-500">Tech</span>Tribe
               </span>
             </motion.div>
           </Link>
@@ -68,16 +104,18 @@ const Header = () => {
             {navLinks.map((link, index) => (
               <motion.div
                 key={link.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+                variants={itemVariants}
                 whileHover={{ scale: 1.1, y: -3 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <NavLink 
                   to={link.path}
                   className={({ isActive }) => `
-                    font-medium nav-link ${isActive ? 'active' : ''}
+                    relative font-medium nav-link hover:text-white transition-colors
+                    ${isActive ? 'text-primary-500 font-semibold' : ''}
+                    after:content-[''] after:absolute after:bottom-[-6px] after:left-0
+                    after:h-[2px] after:bg-primary-500 after:transition-all after:duration-300
+                    ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'}
                   `}
                 >
                   {link.name}
@@ -87,10 +125,14 @@ const Header = () => {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <motion.div 
+            className="md:hidden"
+            variants={itemVariants}
+          >
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-gray-300 p-2 rounded-md focus:outline-none transition-colors"
+              className="text-white hover:text-primary-500 p-2 rounded-md focus:outline-none transition-colors"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +158,7 @@ const Header = () => {
                 )}
               </svg>
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
 
@@ -128,31 +170,38 @@ const Header = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden backdrop-blur-md bg-black/95 shadow-lg w-full"
+            className="md:hidden bg-black/90 backdrop-blur-xl border-t border-gray-800/50"
           >
-            <div className="container mx-auto px-4 py-6">
-              <nav className="flex flex-col space-y-5">
+            <div className="container mx-auto px-4 py-3">
+              <nav className="flex flex-col space-y-4 py-3">
                 {navLinks.map((link) => (
-                  <NavLink
+                  <motion.div
                     key={link.name}
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `py-3 px-5 rounded-md transition-all duration-300 text-lg font-medium ${
-                        isActive
-                          ? 'bg-dark-100 nav-link'
-                          : 'nav-link hover:bg-dark-200 hover:text-white'
-                      }`
-                    }
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    {link.name}
-                  </NavLink>
+                    <NavLink
+                      to={link.path}
+                      className={({ isActive }) => `
+                        block py-2 px-4 ${
+                          isActive 
+                            ? 'text-primary-500 font-semibold bg-white/5 rounded-md' 
+                            : 'nav-link hover:text-white hover:bg-white/5 rounded-md'
+                        }
+                      `}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {link.name}
+                    </NavLink>
+                  </motion.div>
                 ))}
               </nav>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };
 

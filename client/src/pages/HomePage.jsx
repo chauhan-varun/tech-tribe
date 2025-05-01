@@ -224,7 +224,7 @@ const HomePage = () => {
               className="flex flex-col xs:flex-row gap-3 sm:gap-4"
             >
               <motion.a
-                href="https://chat.whatsapp.com/Hgt656siE7aEyq5uFZwBg1"
+                href="https://chat.whatsapp.com/I6YpsX5z3GP6oKlGGw26ka"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileTap={{ scale: 0.95 }}
@@ -447,11 +447,11 @@ const HomePage = () => {
                 variants={itemVariants}
                 className="bg-[#1d1d1d] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
               >
-                <div className="aspect-[3/4] flex items-center justify-center bg-black/20">
+                <div className="aspect-square flex items-center justify-center bg-black/20">
                   <img 
                     src={founder.image} 
                     alt={founder.name} 
-                    className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
                 <div className="p-4 sm:p-6">
