@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { FaBars, FaUser, FaBell, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 const HeaderContainer = styled.header`
-  background-color: var(--card-bg);
+  backdrop-filter: blur(10px);
+  background-color: rgba(25, 25, 25, 0.85);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -12,13 +13,15 @@ const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   z-index: 90;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   margin-left: ${({ $sidebarOpen }) => ($sidebarOpen ? '250px' : '0')};
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
+  width: ${({ $sidebarOpen }) => ($sidebarOpen ? 'calc(100% - 250px)' : '100%')};
   
   @media (max-width: 768px) {
     margin-left: 0;
     padding: 1rem;
+    width: 100%;
   }
   
   @media (max-width: 576px) {
@@ -36,9 +39,12 @@ const ToggleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 0.25rem;
   
   &:hover {
     color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.05);
   }
 `;
 
@@ -46,6 +52,7 @@ const PageTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-color);
+  margin-left: 0.5rem;
   
   @media (max-width: 576px) {
     font-size: 1.2rem;
@@ -189,7 +196,7 @@ const Header = ({ title, toggleSidebar, sidebarOpen }) => {
   return (
     <HeaderContainer $sidebarOpen={sidebarOpen}>
       <div className="d-flex align-items-center">
-        <ToggleButton onClick={toggleSidebar}>
+        <ToggleButton onClick={toggleSidebar} aria-label="Toggle sidebar">
           <FaBars />
         </ToggleButton>
         <PageTitle>{title}</PageTitle>
